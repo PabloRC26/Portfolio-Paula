@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, type Variants } from 'motion/react';
 import { HomePage } from './components/HomePage';
 import { CompetenciesPage } from './components/CompetenciesPage';
 import { CaseStudyPage } from './components/CaseStudyPage';
@@ -35,7 +35,7 @@ export default function App() {
     }
   };
 
-  const pageVariants = {
+  const pageVariants: Variants = {
     initial: {
       opacity: 0,
       y: 20,
@@ -47,7 +47,7 @@ export default function App() {
       scale: 1,
       transition: {
         duration: 0.4,
-        ease: [0.22, 1, 0.36, 1]
+        ease: [0.22, 1, 0.36, 1] as const
       }
     },
     exit: {
@@ -56,7 +56,7 @@ export default function App() {
       scale: 0.98,
       transition: {
         duration: 0.25,
-        ease: [0.22, 1, 0.36, 1]
+        ease: [0.22, 1, 0.36, 1] as const
       }
     }
   };

@@ -3,7 +3,7 @@ import {
   Video, Camera, BarChart3, Search, TrendingUp, Layout,
   Palette, Scissors, Zap, Star, Sparkles, CheckCircle2, ShieldCheck
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, type Variants } from 'motion/react';
 
 // Tool icons
 import iconCapcut from '@assets/paula/icon-capcut.png';
@@ -94,14 +94,14 @@ export function CompetenciesPage() {
     }
   };
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
+        ease: [0.22, 1, 0.36, 1] as const
       }
     }
   };
