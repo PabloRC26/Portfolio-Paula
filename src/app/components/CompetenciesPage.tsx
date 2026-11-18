@@ -160,7 +160,7 @@ export function CompetenciesPage() {
                         {comp.category}
                       </h2>
                     </div>
-                    <div className="p-2.5 bg-white/10 rounded-2xl">
+                    <div className ="p-2.5 bg-white/10 rounded-2xl">
                       <comp.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
