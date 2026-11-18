@@ -4,10 +4,13 @@ import {
   BarChart3, Search, Award, MessageCircle, ExternalLink, Mail, 
   Camera, Video, Layout, Lightbulb, Clock, CheckCircle2, ArrowRight, 
   Heart, Quote, GraduationCap, Globe, Check, Play, Eye, HelpCircle, 
-  Send, Share2, Compass, PhoneCall, RefreshCw, Smartphone, ChevronDown
+  Send, Share2, Compass, PhoneCall, RefreshCw, Smartphone, ChevronDown,
+  Building2, ShieldCheck, Briefcase, MapPin
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Button } from './ui/button';
+import { CLIENT_CASE_STUDIES, PAULA_FAQS, PAULA_CONTACT } from '../data/caseStudiesData';
+import { TikTokVideoCard } from './ui/TikTokVideoCard';
 
 // Assets
 import paulaAsper from '@assets/paula/paula-asper-grad.jpg';
@@ -51,6 +54,9 @@ export function HomePage({ onNavigate, onPresentationMode }: HomePageProps) {
   const [includeAdUsage, setIncludeAdUsage] = useState<boolean>(false);
   const [extraHooks, setExtraHooks] = useState<number>(0);
   const [contactSubmitted, setContactSubmitted] = useState<boolean>(false);
+  const [selectedClientHome, setSelectedClientHome] = useState<string>('intecsa');
+
+  const currentClient = CLIENT_CASE_STUDIES.find((c) => c.id === selectedClientHome) || CLIENT_CASE_STUDIES[0];
 
   // Tools list
   const tools = [
@@ -179,29 +185,8 @@ export function HomePage({ onNavigate, onPresentationMode }: HomePageProps) {
   const hookFee = extraHooks * (selectedCurrency === 'PHP' ? 1200 : 25);
   const calculatedTotal = (selectedCurrency === 'PHP' ? currentBase.pricePHP : currentBase.priceUSD) + adFee + hookFee;
 
-  // FAQs
-  const faqs = [
-    {
-      q: 'How soon do you deliver final files?',
-      a: 'First drafts are delivered within 5–7 business days after receiving your product and creative brief. Rush 48-hour delivery is available upon request.'
-    },
-    {
-      q: 'Can you match my brand’s specific aesthetic?',
-      a: 'Absolutely! Send over your moodboards, fonts, color guidelines, or references. Every shoot is staged to integrate naturally into your existing social presence.'
-    },
-    {
-      q: 'Do you offer commercial paid ad usage rights?',
-      a: 'Yes, while packages include organic publishing rights, paid ad usage (30, 60, 90 days or perpetual) and creator account Spark Ads whitelisting can be added seamlessly.'
-    },
-    {
-      q: 'What is included in raw footage delivery?',
-      a: 'You receive all high-resolution B-roll clips, product close-ups, and alternative hook reads so your internal editors can assemble endless future iterations.'
-    },
-    {
-      q: 'How do revisions work?',
-      a: 'Each package includes 1 to 3 revision rounds. You review drafts on a timestamped link where you can note any adjustments to captions, audio, cuts, or transitions.'
-    }
-  ];
+  // FAQs from updated portfolio
+  const faqs = PAULA_FAQS;
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#2D2323] overflow-x-hidden">
@@ -408,7 +393,163 @@ export function HomePage({ onNavigate, onPresentationMode }: HomePageProps) {
         </div>
       </section>
 
-      {/* ==================== 4. PERSONAL BRAND SPOTLIGHT ==================== */}
+      {/* ==================== 4. CLIENTS & RESULTS (CASE STUDIES) ==================== */}
+      <section id="case-study" className="py-20 bg-[#FDFBF7] border-b-4 border-[#54100F]/10 relative overflow-hidden">
+        <Star className="absolute top-12 left-12 w-8 h-8 text-[#D93240] sparkle" fill="#D93240" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#54100F] bg-[#F6FFB6] px-3.5 py-1.5 rounded-full border border-[#54100F]/30">
+              ✦ PROVEN CLIENT RESULTS
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#54100F] font-display mt-3">
+              Clients and Results
+            </h2>
+            <p className="text-base text-[#2D2323]/80 mt-3 font-medium">
+              Real brands, cross-platform growth, and high-converting short-form videos. Watch the TikTok videos directly here!
+            </p>
+          </div>
+
+          {/* Client Tab Selector */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+            {CLIENT_CASE_STUDIES.map((client) => {
+              const isSelected = selectedClientHome === client.id;
+              return (
+                <button
+                  key={client.id}
+                  onClick={() => setSelectedClientHome(client.id)}
+                  className={`px-4 py-2 rounded-2xl font-mono text-xs sm:text-sm font-bold transition-all flex items-center gap-2 border-2 ${
+                    isSelected
+                      ? 'bg-[#54100F] text-[#F6FFB6] border-[#54100F] shadow-lg scale-105'
+                      : 'bg-white text-[#54100F] border-[#54100F]/20 hover:border-[#D93240] hover:bg-[#FFD2C1]/20'
+                  }`}
+                >
+                  <Building2 className={`w-4 h-4 ${isSelected ? 'text-[#F6FFB6]' : 'text-[#D93240]'}`} />
+                  <span>{client.shortName}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Client Spotlight */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border-3 border-[#54100F] shadow-xl space-y-8">
+            {/* Client Header Info */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#54100F]/15 pb-6">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#54100F] bg-[#F6FFB6] px-3 py-1 rounded-full border border-[#54100F]/20">
+                    {currentClient.name}
+                  </span>
+                  <span className="text-xs font-mono font-semibold text-[#D93240] bg-[#FFD2C1]/40 px-3 py-1 rounded-full flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5" />
+                    {currentClient.location}
+                  </span>
+                </div>
+                <h3 className="text-3xl font-extrabold text-[#54100F] font-display">
+                  {currentClient.subtitle}
+                </h3>
+                <p className="text-sm text-[#2D2323]/80 font-medium mt-1">
+                  {currentClient.tagline}
+                </p>
+              </div>
+
+              {/* Accounts Badges */}
+              <div className="flex flex-wrap items-center gap-2">
+                {currentClient.accounts.map((acc, idx) => (
+                  <span
+                    key={idx}
+                    className="text-xs font-mono bg-[#FDFBF7] text-[#54100F] px-3 py-1.5 rounded-full border border-[#54100F]/20 font-bold flex items-center gap-1.5 shadow-xs"
+                  >
+                    <strong className="text-[#D93240]">{acc.platform}:</strong>
+                    <span>{acc.handle}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Challenge & Objective */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="p-5 rounded-2xl bg-[#FFD2C1]/30 border-2 border-[#54100F]/20 space-y-2">
+                <span className="text-xs font-mono font-bold uppercase text-[#D93240] tracking-wider block">
+                  The Challenge
+                </span>
+                <p className="text-sm text-[#2D2323] leading-relaxed">
+                  {currentClient.challenge}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[#F6FFB6]/40 border-2 border-[#54100F]/20 space-y-2">
+                <span className="text-xs font-mono font-bold uppercase text-[#54100F] tracking-wider block">
+                  The Objective
+                </span>
+                <p className="text-sm text-[#2D2323] leading-relaxed font-medium">
+                  {currentClient.objective}
+                </p>
+              </div>
+            </div>
+
+            {/* Verified Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {currentClient.metrics.map((m, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-[#54100F] text-white border-2 border-[#54100F] text-center shadow"
+                >
+                  <div className="text-2xl sm:text-3xl font-mono font-extrabold text-[#F6FFB6]">
+                    {m.value}
+                  </div>
+                  <div className="text-xs font-mono uppercase text-white/90 font-bold mt-0.5">
+                    {m.label}
+                  </div>
+                  <div className="text-[11px] text-[#FFD2C1]/80 mt-1 line-clamp-1">
+                    {m.sublabel}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Playable TikTok Videos Showcase */}
+            <div className="bg-[#2A0808] text-white p-6 sm:p-8 rounded-3xl border-3 border-[#54100F] shadow-2xl">
+              <div className="text-center max-w-xl mx-auto mb-6">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#54100F] bg-[#F6FFB6] px-3 py-1 rounded-full">
+                  ▶ VIDEOS DE TIKTOK INTEGRADOS (REPRODUCIBLES DIRECTAMENTE)
+                </span>
+                <h4 className="text-2xl font-display font-extrabold text-white mt-2">
+                  Top TikTok Videos — {currentClient.name}
+                </h4>
+                <p className="text-xs text-white/80 font-mono mt-1">
+                  Haz clic en el botón de Play para verlos y escucharlos aquí en la web sin abrir TikTok.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                {currentClient.videos.map((vid, idx) => (
+                  <TikTokVideoCard key={idx} {...vid} />
+                ))}
+              </div>
+            </div>
+
+            {/* Key Results */}
+            <div className="grid md:grid-cols-3 gap-4 pt-4 border-t border-[#54100F]/15">
+              {currentClient.resultsList.map((res, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-[#FDFBF7] border border-[#54100F]/15"
+                >
+                  <h5 className="font-display font-bold text-sm text-[#54100F] mb-1">
+                    ✦ {res.title}
+                  </h5>
+                  <p className="text-xs text-[#2D2323]/80 leading-relaxed">
+                    {res.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== 4B. PERSONAL BRAND SPOTLIGHT ==================== */}
       <section id="brand" className="py-20 bg-[#F2F1EB] border-b-4 border-[#54100F]/10 relative overflow-hidden">
         <Star className="absolute top-12 right-16 w-8 h-8 text-[#D93240] sparkle" fill="#D93240" />
 
@@ -1115,32 +1256,45 @@ export function HomePage({ onNavigate, onPresentationMode }: HomePageProps) {
                   </div>
                   <div>
                     <span className="text-[10px] font-mono text-[#FFD2C1] uppercase tracking-wider block">Direct Email</span>
-                    <a href="mailto:paula.robles.marketing@gmail.com" className="text-sm sm:text-base font-mono font-semibold text-white hover:text-[#F6FFB6] transition-colors">
-                      paula.robles.marketing@gmail.com
+                    <a href={`mailto:${PAULA_CONTACT.email}`} className="text-sm sm:text-base font-mono font-semibold text-white hover:text-[#F6FFB6] transition-colors">
+                      {PAULA_CONTACT.email}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 border border-white/10">
                   <div className="w-11 h-11 rounded-xl bg-[#F6FFB6] flex items-center justify-center text-[#54100F] shrink-0">
-                    <MessageCircle className="w-5 h-5" />
+                    <PhoneCall className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono text-[#FFD2C1] uppercase tracking-wider block">TikTok & Social</span>
-                    <a href="https://tiktok.com/@boliviana.en.canada" target="_blank" rel="noreferrer" className="text-sm sm:text-base font-mono font-semibold text-white hover:text-[#F6FFB6] transition-colors">
-                      @boliviana.en.canada
+                    <span className="text-[10px] font-mono text-[#FFD2C1] uppercase tracking-wider block">Direct Phone / WhatsApp</span>
+                    <a href={`tel:${PAULA_CONTACT.phone.replace(/[^0-9+]/g, '')}`} className="text-sm sm:text-base font-mono font-semibold text-white hover:text-[#F6FFB6] transition-colors">
+                      {PAULA_CONTACT.phone}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 border border-white/10">
                   <div className="w-11 h-11 rounded-xl bg-[#FFD2C1] flex items-center justify-center text-[#54100F] shrink-0">
-                    <Globe className="w-5 h-5" />
+                    <MapPin className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="text-[10px] font-mono text-[#FFD2C1] uppercase tracking-wider block">Location</span>
                     <p className="text-sm sm:text-base font-mono font-semibold text-white">
-                      Winnipeg, Manitoba, Canada (Available Worldwide)
+                      {PAULA_CONTACT.address}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Canada Work Authorization Banner */}
+                <div className="p-4 rounded-2xl bg-[#F6FFB6]/15 border border-[#F6FFB6]/30 flex items-start gap-3">
+                  <ShieldCheck className="w-5 h-5 text-[#F6FFB6] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-mono font-bold text-[#F6FFB6] block">
+                      Legally Authorized to Work in Canada (No Sponsorship Required)
+                    </span>
+                    <p className="text-xs text-white/80 mt-0.5">
+                      Open to full-time, contract, and freelance roles — on-site/hybrid in MB, BC, ON, or fully remote.
                     </p>
                   </div>
                 </div>
@@ -1267,13 +1421,15 @@ export function HomePage({ onNavigate, onPresentationMode }: HomePageProps) {
             </div>
 
             <div className="flex items-center gap-4 text-xs font-mono text-[#F6FFB6]">
-              <a href="mailto:paula.robles.marketing@gmail.com" className="hover:underline">Email</a>
+              <a href={`mailto:${PAULA_CONTACT.email}`} className="hover:underline">{PAULA_CONTACT.email}</a>
               <span>•</span>
               <a href="https://tiktok.com/@boliviana.en.canada" target="_blank" rel="noreferrer" className="hover:underline">TikTok</a>
               <span>•</span>
+              <a href="#case-study" className="hover:underline">Clients</a>
+              <span>•</span>
               <a href="#about" className="hover:underline">About</a>
               <span>•</span>
-              <a href="#packages" className="hover:underline">Rates</a>
+              <a href="#contact" className="hover:underline">Contact</a>
             </div>
 
             <div className="text-xs text-white/60 font-mono">

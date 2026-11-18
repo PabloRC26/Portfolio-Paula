@@ -15,7 +15,7 @@ export function Navigation({ currentPage, onNavigate, onPresentationMode }: Navi
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About & Degree' },
-    { id: 'brand', label: 'Personal Brand' },
+    { id: 'case-study', label: 'Case Studies' },
     { id: 'competencies', label: 'Skills & Tools' },
     { id: 'showcase', label: 'UGC Portfolio' },
     { id: 'packages', label: 'Packages & Rates' },
